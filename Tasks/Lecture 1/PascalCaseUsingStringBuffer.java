@@ -26,7 +26,7 @@ import java.util.Scanner;
 
 
 
-public class Java18Training  {
+public class PascalCase {
 
     public static void main(String[] args) {
         
@@ -64,9 +64,15 @@ public class Java18Training  {
             
             /*
               Branch 1:  used to convert the first index of the word into Uppercase only.
-              if the state of change variable is true and the current character is lowercase, then convert it to uppercase.
+              if the state of change variable is true and the current character is lowercase, then convert it to uppercase, 
+              and finally reset the change variable to false.
             */
-           if(change) sb.setCharAt(i, Character.toUpperCase(ch));
+           if(change) {
+               sb.setCharAt(i, Character.toUpperCase(ch));
+               
+                //   This value will remain false as long as the current character is not a space.
+               change = false;
+           }
             
            /*
               Branch 2:
@@ -74,8 +80,7 @@ public class Java18Training  {
               We must change the state of change variable from false to true
               to tell while loop that in the next iteration, the index may be the first index of a new world,  and therefore enable Branch 1.
            
-             After that, We must skip the rest of the code in order  to enable branch 1,
-             and  disable increment operator of the counter after StringLength decrement.
+             After that, We must skip the rest of the code in order  not to enable increment operator of the counter after StringLength decrement.
            */
             else if (ch == ' '){
                 sb.deleteCharAt(i);
@@ -83,9 +88,7 @@ public class Java18Training  {
                 change = true;
                 continue;
             }
-            
-          //   This value will remain false as long as the current character is not a space.
-            change = false;
+           
             i++;
         }
         
@@ -102,3 +105,4 @@ public class Java18Training  {
     }
     
     }
+    
