@@ -5,7 +5,6 @@ For example, if the user types: "number of students", display "NumberOfStudents"
 Make sure that the program is not dependent on the input. So, if the user types "NUMBER OF STUDENTS", the program should still display "NumberOfStudents".
 */
 
-
 import java.util.Scanner;
 
 
@@ -27,12 +26,12 @@ import java.util.Scanner;
 
 
 
-public class PascalCase {
+public class Java18Training  {
 
     public static void main(String[] args) {
         
         // Take the input from the user as an Imutable String, and then convert it to mutable String by String Buffer
-        StringBuffer sb = new StringBuffer( new Scanner(System.in).nextLine());
+        StringBuffer sb = new StringBuffer( new Scanner(System.in).nextLine().toLowerCase());
         try{
             
             // Name Convention Validation 
@@ -62,29 +61,21 @@ public class PascalCase {
             
             ch = sb.charAt(i); // store the character into ch variable before any process.
             
-            /*
-             Branch 1 : used to  convert all characters of the word between first index of it and next space character.
-             if the state of change variable is false and the current character is uppercase, then convert it to lowercase.
-            */
-            if(!change && Character.isUpperCase(ch)){
-                sb.setCharAt(i, Character.toLowerCase(ch));
-            }
             
             /*
-              Branch 2:  used to convert the first index of the word into Uppercase only.
+              Branch 1:  used to convert the first index of the word into Uppercase only.
               if the state of change variable is true and the current character is lowercase, then convert it to uppercase.
             */
-           else if(change &&Character.isLowerCase(ch)){
-                sb.setCharAt(i, Character.toUpperCase(ch));
-            }
+           if(change) sb.setCharAt(i, Character.toUpperCase(ch));
             
            /*
+              Branch 2:
               If the current character is SPACE, then delete it.
               We must change the state of change variable from false to true
-              to tell while loop that in the next iteration, the index may be the first index of a new world,  and therefore enable Branch 2.
+              to tell while loop that in the next iteration, the index may be the first index of a new world,  and therefore enable Branch 1.
            
-             After that, We must skip the rest of the code in order not to enable branch 1,
-             or enable increment operator of the counter after StringLength decrement.
+             After that, We must skip the rest of the code in order  to enable branch 1,
+             and  disable increment operator of the counter after StringLength decrement.
            */
             else if (ch == ' '){
                 sb.deleteCharAt(i);
@@ -93,10 +84,7 @@ public class PascalCase {
                 continue;
             }
             
-            /*
-            This value will remain false as long as the current character is not a space,
-            or the next character is not the first of a new word.
-            */
+          //   This value will remain false as long as the current character is not a space.
             change = false;
             i++;
         }
