@@ -6,18 +6,43 @@ Make sure that the program is not dependent on the input. So, if the user types 
 */
 
 
+import java.util.Scanner;
+
+
+/**
+ * This class is used to throw an Exception of <Strong>NameConventionException</Strong> if the first index of the variable name is not valid.
+ * The String should not start with the <em><Strong>special characters</Strong></em> like !, @, #,$, %, ^, &, *, _, +, /, ... etc, or Numbers. or <Strong>Numbers</Strong>.
+ * It should start with a lowercase letter such as id, name.
+ * @author Khaled Taha
+ */
+ class NameConventionException extends Exception{
+        
+        public NameConventionException() {
+            super("""
+                            Your String should not start with the special characters like !, @, #,$, %, ^, &, *, _, +, /, ... etc, or Numbers.
+                  	      It should start with a lowercase letter such as id, name.
+                        """);
+            }
+      }
+
+
+
+public class PascalCase {
+
     public static void main(String[] args) {
         
         // Take the input from the user as an Imutable String, and then convert it to mutable String by String Buffer
         StringBuffer sb = new StringBuffer( new Scanner(System.in).nextLine());
-        
+        try{
+            
+            if(!Character.isLetter(sb.charAt(0))) throw new NameConventionException();
         /*
            The length of the String.
            This line will save processes when while loop check its condition every iteration.
         */
         int StringLength = sb.length();
         
-        
+        int ksdf;
         /*
            used to allocate some memory for each character every iteration
            and use this charcter directly instead of using chatAt(i) method.
@@ -35,24 +60,22 @@ Make sure that the program is not dependent on the input. So, if the user types 
         
         while ( i < StringLength) {
             
-            ch = sb.charAt(i); // store the character into ch variable before any process 
+            ch = sb.charAt(i); // store the character into ch variable before any process.
             
             /*
              Branch 1 : used to  convert all characters of the word between first index of it and next space character.
-             if the state of change variable is false and the current character is uppercase, then convert it to lowercase by adding ASCII value 32 to it.
+             if the state of change variable is false and the current character is uppercase, then convert it to lowercase.
             */
-            if(!change && (ch >= 65 && ch <= 90)){
-                ch += 32;
-                sb.setCharAt(i, ch);
+            if(!change && Character.isUpperCase(ch)){
+                sb.setCharAt(i, Character.toLowerCase(ch));
             }
             
             /*
               Branch 2:  used to convert the first index of the word into Uppercase only.
-              if the state of change variable is true and the current character is lowercase, then convert it to uppercase by subtracting ASCII value 32 to it.
+              if the state of change variable is true and the current character is lowercase, then convert it to uppercase.
             */
-           else if(change && (ch >= 97 && ch <= 122)){
-                ch -= 32;
-                sb.setCharAt(i, ch);
+           else if(change &&Character.isLowerCase(ch)){
+                sb.setCharAt(i, Character.toUpperCase(ch));
             }
             
            /*
@@ -78,6 +101,16 @@ Make sure that the program is not dependent on the input. So, if the user types 
             i++;
         }
         
+        
         // The output
         System.out.println("PascalCase: " + sb);
+        
+        } catch(NameConventionException n){
+            
+            System.out.println("-----------------------------------------------");
+            System.out.println("Error .......");
+            System.out.println(n.getMessage());
+        }
+    }
+    
     }
