@@ -20,7 +20,7 @@ import java.util.Scanner;
 
 
 
-public class Java18Training {
+public class PascalCase {
     
     public static void main(String[] args) {
         
