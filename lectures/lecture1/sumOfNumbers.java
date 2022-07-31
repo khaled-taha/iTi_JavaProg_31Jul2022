@@ -6,30 +6,32 @@
 
     public static void main(String[] args) {
         
-        Scanner in = new Scanner(System.in);
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         
            String state;
            long sum = 0L;
            
            lable:  do{
+               
+               try{
+                   
                  System.out.print("Enter any number or exit by entering ok: ");
-                 state = in.next(); // input
-                 
-                 try{
-                     
+                 state = br.readLine(); // input
+
                 // input validation
                  switch(state){
                      case "OK", "Ok", "oK", "ok" -> { break lable;} // case 1 to exit
                      default -> sum += Integer.valueOf(state); //  case 2 to add the numbers entered
                  }
                  
-                 } catch(NumberFormatException n){
+                 } catch(NumberFormatException | IOException n){
                      // Input error
                      System.out.println("You may have entered the wrong value");
                  }
                  
            } while(true);
            
+                // the result
                System.out.println("Finished....");
                System.out.println("sum: " + sum);
            }
