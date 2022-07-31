@@ -7,38 +7,77 @@ Make sure that the program is not dependent on the input. So, if the user types 
 
 
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
         
-        StringBuffer sb = new StringBuffer(in.nextLine());
+        // Take the input from the user as an Imutable String, and then convert it to mutable String by String Buffer
+        StringBuffer sb = new StringBuffer( new Scanner(System.in).nextLine());
+        
+        /*
+           The length of the String.
+           This line will save processes when while loop check its condition every iteration.
+        */
         int StringLength = sb.length();
+        
+        
+        /*
+           used to allocate some memory for each character every iteration
+           and use this charcter directly instead of using chatAt(i) method.
+        */
+        char ch; 
+        int i = 0; // Counter for while loop and index to catch every character using chatAt(i) method.
+        
+        /*
+           Used to decide when we must change the case of character from uppercase to lowercase and vice versa.
+           
+           true:   to convert the first index of the word into Uppercase only.
+           false: to convert all characters of the word between first index of it and next space character.
+        */
         boolean change = true;
-        char ch;
-        int i = 0;
         
         while ( i < StringLength) {
-            ch = sb.charAt(i);
             
+            ch = sb.charAt(i); // store the character into ch variable before any process 
+            
+            /*
+             Branch 1 : used to  convert all characters of the word between first index of it and next space character.
+             if the state of change variable is false and the current character is uppercase, then convert it to lowercase by adding ASCII value 32 to it.
+            */
             if(!change && (ch >= 65 && ch <= 90)){
                 ch += 32;
                 sb.setCharAt(i, ch);
             }
             
+            /*
+              Branch 2:  used to convert the first index of the word into Uppercase only.
+              if the state of change variable is true and the current character is lowercase, then convert it to uppercase by subtracting ASCII value 32 to it.
+            */
            else if(change && (ch >= 97 && ch <= 122)){
                 ch -= 32;
                 sb.setCharAt(i, ch);
             }
             
+           /*
+              If the current character is SPACE, then delete it.
+              We must change the state of change variable from false to true
+              to tell while loop that in the next iteration, the index may be the first index of a new world,  and therefore enable Branch 2.
+           
+             After that, We must skip the rest of the code in order not to enable branch 1,
+             or enable increment operator of the counter after StringLength decrement.
+           */
             else if (ch == ' '){
                 sb.deleteCharAt(i);
                 StringLength--;
                 change = true;
                 continue;
             }
+            
+            /*
+            This value will remain false as long as the current character is not a space,
+            or the next character is not the first of a new word.
+            */
             change = false;
             i++;
-            
         }
         
-        System.out.println(sb);
-        
-           }
+        // The output
+        System.out.println("PascalCase: " + sb);
+    }
