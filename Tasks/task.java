@@ -42,7 +42,6 @@ public class PascalCase {
         */
         int StringLength = sb.length();
         
-        int ksdf;
         /*
            used to allocate some memory for each character every iteration
            and use this charcter directly instead of using chatAt(i) method.
