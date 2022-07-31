@@ -35,6 +35,7 @@ public class PascalCase {
         StringBuffer sb = new StringBuffer( new Scanner(System.in).nextLine());
         try{
             
+            // Name Convention Validation 
             if(!Character.isLetter(sb.charAt(0))) throw new NameConventionException();
         /*
            The length of the String.
