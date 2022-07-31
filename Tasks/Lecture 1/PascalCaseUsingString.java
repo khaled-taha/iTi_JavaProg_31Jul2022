@@ -20,16 +20,18 @@ import java.util.Scanner;
 
 
 
-public class PascalCase {
+public class Java18Training {
     
     public static void main(String[] args) {
         
         Scanner in = new Scanner(System.in);
         
-        // Take the input from the user as a line and Split it around matches of SPACE.
-        String[] values = in.nextLine().split(" ");
-
        try{ 
+                   
+           // Take the input from the user as a line.
+          // Convert its character to lowercase.
+         // Split it around matches of SPACE.
+          String[] values = in.nextLine().toLowerCase().split(" ");
            
            // Name Convention Validation 
            if(!Character.isLetter(values[0].charAt(0))) throw new NameConventionException();
@@ -42,13 +44,10 @@ public class PascalCase {
            
         for (int i = 0; i < values.length; i++) {
             
-            // Step 1: convert the word to lowercase.
-            values[i] = values[i].toLowerCase();
-            
-            // Step 2: store the first lowercase character of word.
+            // Step 1: store the first lowercase character of word.
             ch = values[i].charAt(0);
             
-            //Step 3: Replace the first lowercase character to uppercase.
+            //Step 2: Replace the first lowercase character to uppercase.
             values[i] = values[i].replace(ch, Character.toUpperCase(ch));
             
             // Finally, print the word.
