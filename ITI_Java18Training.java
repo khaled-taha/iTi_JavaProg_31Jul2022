@@ -1,6 +1,10 @@
-    public static void main(String[] args) {
+/*
+This is a program to take two numbers from the keyboard and print the max of them.
+*/    
+
+public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-        // Object from Scanner to take an input to the consol with keyboard Stream
+        // Object from Scanner to take an input to the console with keyboard Stream
         
         
         int num1 = in.nextInt(); // first Input
