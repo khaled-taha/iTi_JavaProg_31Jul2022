@@ -28,13 +28,13 @@ public class Java18Training {
         
        try{ 
                    
-           // Take the input from the user as a line.
-          // Convert its character to lowercase.
-         // Split it around matches of SPACE.
+           // Take the input from the user as a line and Split it around matches of SPACE.
           String[] values = in.nextLine().toLowerCase().split(" ");
            
            // Name Convention Validation 
            if(!Character.isLetter(values[0].charAt(0))) throw new NameConventionException();
+           
+           String result = "";
            
         /*
            used to allocate some memory for the first lowercase character of each word every iteration
@@ -47,13 +47,12 @@ public class Java18Training {
             // Step 1: store the first lowercase character of word.
             ch = values[i].charAt(0);
             
-            //Step 2: Replace the first lowercase character to uppercase.
-            values[i] = values[i].replace(ch, Character.toUpperCase(ch));
-            
-            // Finally, print the word.
-            System.out.print(values[i]);
+            //Step 2: Replace the first lowercase character to uppercase and add the new String to the result.
+            result += values[i].replace(ch, Character.toUpperCase(ch));
             
            } // end for loop
+        
+           System.out.println(result);
         
        } catch(NameConventionException| StringIndexOutOfBoundsException | ArrayIndexOutOfBoundsException n){
            System.out.println("Error.........");
