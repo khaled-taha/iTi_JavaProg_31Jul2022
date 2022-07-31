@@ -1,5 +1,5 @@
 /*
-This is a program to take two numbers from the keyboard and print the max of them.
+Write a program which takes two numbers from the console and displays the maximum of the two.
 */    
 
     public static void main(String[] args) {
