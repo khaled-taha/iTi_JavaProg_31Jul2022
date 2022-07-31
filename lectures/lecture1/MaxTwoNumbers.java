@@ -15,7 +15,7 @@ This is a program to take two numbers from the keyboard and print the max of the
               System.out.println("Max: " + max);
               
         }catch(InputMismatchException | IllegalStateException m) {
-            System.out.println("Error......");
+            System.out.println("Error......!");
             System.out.println("The Scanner may be closed or you enter an invalid input");
         }
     }
