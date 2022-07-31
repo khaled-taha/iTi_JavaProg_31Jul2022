@@ -6,7 +6,7 @@ This is a program to take two numbers from the keyboard and print the max of the
         
         Scanner in = new Scanner(System.in);
         // Object from Scanner to take an input to the consol with keyboard Stream
-        int num1 , num2, max;
+        int num1 , num2;
         
         try{
                num1 = in.nextInt(); // first Input
