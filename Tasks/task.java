@@ -19,9 +19,9 @@ import java.util.Scanner;
         
         public NameConventionException() {
             super("""
-                            Your String should not start with the special characters like !, @, #,$, %, ^, &, *, _, +, /, ... etc, or Numbers.
-                  	      It should start with a lowercase letter such as id, name.
-                        """);
+                     Your String should not start with the special characters like !, @, #,$, %, ^, &, *, _, +, /, ... etc, or Numbers.
+                  	  It should start with a lowercase letter such as id, name.
+                   """);
             }
       }
 
