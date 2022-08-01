@@ -34,7 +34,7 @@ public class PascalCase {
        try{ 
                    
            // Take the input from the user as a line and Split it around matches of SPACE.
-          String[] values = in.nextLine().toLowerCase().split(" ");
+          String[] values = in.nextLine().trim().toLowerCase().split(" ");
            
            // Name Convention Validation 
            if(!Character.isLetter(values[0].charAt(0))) throw new NameConventionException();
