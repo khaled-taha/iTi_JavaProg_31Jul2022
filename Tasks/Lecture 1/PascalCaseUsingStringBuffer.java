@@ -31,7 +31,7 @@ public class PascalCase {
     public static void main(String[] args) {
         
         // Take the input from the user as an Imutable String, and then convert it to mutable String by String Buffer
-        StringBuffer sb = new StringBuffer( new Scanner(System.in).nextLine().toLowerCase());
+        StringBuffer sb = new StringBuffer( new Scanner(System.in).nextLine().trim().toLowerCase());
         try{
             
             // Name Convention Validation 
