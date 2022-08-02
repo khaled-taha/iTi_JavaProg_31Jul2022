@@ -10,28 +10,42 @@ so the class should throw an error if its started twice
 
 import java.util.Calendar;
 
-public class OOPIntroduction {
+public class StopWatch {
     
-    private Calendar startTime;
-    private Calendar endTime;
-    private String duration;
+    private Calendar startTime; // to store an instance from calender
+    private Calendar endTime; // to store an instance from calender
+    private boolean started; // to know the state of the stopwatch
+    private String duration; // to store the duration between start time and end time.
+    
 
-    public OOPIntroduction() {
-    }
+    public StopWatch() { }
     
-    
+    /**
+     * ResetTime method is used to reset the time with the current time
+     * if the the stopwatch does not start <String>(started variable == false)</Strong>.
+     * <br>
+     * If you try to start it <Strong>and the started variable is true</Strong>, then the method will throw IllegalAccessError
+     * @throws IllegalAccessError 
+     * @return void
+     * @since 2-8-2022
+     */
     private void ResetTime() throws IllegalAccessError{
-        if(this.startTime == null) this.startTime = Calendar.getInstance();
+        if(!this.started) this.startTime = Calendar.getInstance();
         else throw new  IllegalAccessError("Already reset");
     }
+    
     
     public void start(){
            this.ResetTime();
     }
     
+
     public void end(){
-        this.endTime = Calendar.getInstance();
-        if(this.startTime != null) this.Calculate();
+        // you can call the end method if only the stopwatch is already starting
+         if(!this.started){
+                      this.endTime = Calendar.getInstance();
+                      this.Calculate();
+         }
     }
     
     private void Calculate(){
@@ -39,30 +53,31 @@ public class OOPIntroduction {
            Long differSeconds = differMilliSeconds / (1000);
            Long differMin = differSeconds / 60;
            Long differHours = differMin / 60;
-           
            this.duration = differHours.toString() + " : " + differMin.toString() + " : " + differSeconds.toString();
     }
 
+    /**
+     * @return the duration between start time and end time.
+     */
     public String getDuration() {
         return duration;
     }
     
     
 
-    public static void main(String[] args) throws InterruptedException {
-           OOPIntroduction o = new OOPIntroduction();
+    public static void main(String[] args) {
+           StopWatch sw = new StopWatch();
            
            try{
-           o.start();
-           o.start();
-           }catch(IllegalAccessError error){
+           sw.start();
+           sw.start();
+           Thread.sleep(5000);
+           }catch(IllegalAccessError | InterruptedException error){
                System.out.println(error.getMessage());
            }
-           Thread.sleep(5000);
-           o.end();
-           
-           System.out.println("Duration : " + o.getDuration());
-           
+           sw.end();
+           System.out.println("Duration : " + sw.getDuration());
            }
     }
+
 
