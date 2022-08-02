@@ -2,7 +2,6 @@
 
 import java.util.Calendar;
 
-
 public class OOPIntroduction {
     
     private Calendar startTime;
@@ -13,9 +12,9 @@ public class OOPIntroduction {
     }
     
     
-    private void ResetTime(){
+    private void ResetTime() throws IllegalAccessError{
         if(this.startTime == null) this.startTime = Calendar.getInstance();
-        else System.out.println("Already reset");
+        else throw new  IllegalAccessError("Already reset");
     }
     
     public void start(){
@@ -24,7 +23,7 @@ public class OOPIntroduction {
     
     public void end(){
         this.endTime = Calendar.getInstance();
-        this.Calculate();
+        if(this.startTime != null) this.Calculate();
     }
     
     private void Calculate(){
@@ -44,11 +43,18 @@ public class OOPIntroduction {
 
     public static void main(String[] args) throws InterruptedException {
            OOPIntroduction o = new OOPIntroduction();
+           
+           try{
            o.start();
            o.start();
+           }catch(IllegalAccessError error){
+               System.out.println(error.getMessage());
+           }
            Thread.sleep(5000);
            o.end();
-           System.out.println(o.getDuration());
+           
+           System.out.println("Duration : " + o.getDuration());
+           
+           }
     }
 
-}
