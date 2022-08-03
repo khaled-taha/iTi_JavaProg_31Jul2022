@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class OOPIntroduction {
+public class bannedStudents {
 
     public static void main(String[] args) throws Exception {
         Scanner in = new Scanner(System.in);
