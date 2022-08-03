@@ -17,6 +17,7 @@ public class OOPIntroduction {
 
 
         // ask the user to enter any student user name.
+        System.out.print("Enter your name: ");
         String userName = in.nextLine();
         try {
             if (checkUserName(NotBandedUserNames, userName)) {
