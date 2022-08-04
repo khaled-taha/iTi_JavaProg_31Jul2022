@@ -42,13 +42,7 @@ public class WriteInFile extends Thread implements Runnable{
             this.bw.close();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
-        }finally {
-            try {
-                bw.close();
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
-     }
+        }
     }
      
 }
