@@ -51,13 +51,7 @@ public class ReadPage extends Thread implements Runnable {
             this.br.close();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
-        }finally {
-            try {
-                br.close();
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
-     }
+        }
     }
     
     
