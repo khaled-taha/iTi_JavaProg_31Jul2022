@@ -1,257 +1,258 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html lang = "en">
-
-<head>
-
-<link rel="shortcut icon" href="https://introcs.cs.princeton.edu/favicon.ico">
-<link rel="stylesheet"    href="https://introcs.cs.princeton.edu/java.css" type="text/css">
-
-<title>Rational.java</title>
-
-<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
-<meta NAME="DESCRIPTION" CONTENT="Rational code in Java">
-<meta NAME="TITLE" CONTENT="Rational code in Java">
-<meta NAME="KEYWORDS" CONTENT="Rational,java,programming,computer science,algorithm,program,code">
-<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
-
-</head>
 
 
-<body>
-<center><h1>Rational.java</h1></center><p><br>
 
-Below is the syntax highlighted version of <a href = "Rational.java">Rational.java</a>
-from <a href = "https://introcs.cs.princeton.edu/java/92symbolic">&#167;9.2 Floating Point</a>.
-<p><br>
+
+
+
+
+
+Rational.java
+
+
+
+
+
+
+
+
+
+
+
+
+Rational.java
+
+Below is the syntax highlighted version of Rational.java
+from &#167;9.2 Floating Point.
+
 
 <!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
-<pre><tt><span class="comment">/******************************************************************************</span>
-<span class="comment"> *  Compilation:  javac Rational.java</span>
-<span class="comment"> *  Execution:    java Rational</span>
-<span class="comment"> *</span>
-<span class="comment"> *  Immutable ADT for Rational numbers. </span>
-<span class="comment"> * </span>
-<span class="comment"> *  Invariants</span>
-<span class="comment"> *  -----------</span>
-<span class="comment"> *   - gcd(num, den) = 1, i.e, the rational number is in reduced form</span>
-<span class="comment"> *   - den &gt;= 1, the denominator is always a positive integer</span>
-<span class="comment"> *   - 0/1 is the unique representation of 0</span>
-<span class="comment"> *</span>
-<span class="comment"> *  We employ some tricks to stave of overflow, but if you</span>
-<span class="comment"> *  need arbitrary precision rationals, use BigRational.java.</span>
-<span class="comment"> *</span>
-<span class="comment"> ******************************************************************************/</span>
+/******************************************************************************
+ *  Compilation:  javac Rational.java
+ *  Execution:    java Rational
+ *
+ *  Immutable ADT for Rational numbers. 
+ * 
+ *  Invariants
+ *  -----------
+ *   - gcd(num, den) = 1, i.e, the rational number is in reduced form
+ *   - den &gt;= 1, the denominator is always a positive integer
+ *   - 0/1 is the unique representation of 0
+ *
+ *  We employ some tricks to stave of overflow, but if you
+ *  need arbitrary precision rationals, use BigRational.java.
+ *
+ ******************************************************************************/
 
-<span class="keyword">public</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">Rational</span><span class="normal"> </span><span class="keyword">implements</span><span class="normal"> Comparable</span><span class="symbol">&lt;</span><span class="normal">Rational</span><span class="symbol">&gt;</span><span class="normal"> </span><span class="cbracket">{</span>
-<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="usertype">Rational</span><span class="normal"> zero </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(</span><span class="number">0</span><span class="symbol">,</span><span class="normal"> </span><span class="number">1</span><span class="symbol">);</span>
+public class Rational implements Comparable&lt;Rational&gt; {
+    private static Rational zero = new Rational(0, 1);
 
-<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="type">int</span><span class="normal"> num</span><span class="symbol">;</span><span class="normal">   </span><span class="comment">// the numerator</span>
-<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="type">int</span><span class="normal"> den</span><span class="symbol">;</span><span class="normal">   </span><span class="comment">// the denominator</span>
+    private int num;   // the numerator
+    private int den;   // the denominator
 
-<span class="normal">    </span><span class="comment">// create and initialize a new Rational object</span>
-<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> numerator</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> denominator</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+    // create and initialize a new Rational object
+    public Rational(int numerator, int denominator) {
 
-<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">denominator </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
-<span class="normal">            </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">ArithmeticException</span><span class="symbol">(</span><span class="string">"denominator is zero"</span><span class="symbol">);</span>
-<span class="normal">        </span><span class="cbracket">}</span>
+        if (denominator == 0) {
+            throw new ArithmeticException("denominator is zero");
+        }
 
-<span class="normal">        </span><span class="comment">// reduce fraction</span>
-<span class="normal">        </span><span class="type">int</span><span class="normal"> g </span><span class="symbol">=</span><span class="normal"> </span><span class="function">gcd</span><span class="symbol">(</span><span class="normal">numerator</span><span class="symbol">,</span><span class="normal"> denominator</span><span class="symbol">);</span>
-<span class="normal">        num </span><span class="symbol">=</span><span class="normal"> numerator   </span><span class="symbol">/</span><span class="normal"> g</span><span class="symbol">;</span>
-<span class="normal">        den </span><span class="symbol">=</span><span class="normal"> denominator </span><span class="symbol">/</span><span class="normal"> g</span><span class="symbol">;</span>
+        // reduce fraction
+        int g = gcd(numerator, denominator);
+        num = numerator   / g;
+        den = denominator / g;
 
-<span class="normal">        </span><span class="comment">// needed only for negative numbers</span>
-<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">den </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span><span class="normal"> den </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">-</span><span class="normal">den</span><span class="symbol">;</span><span class="normal"> num </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">-</span><span class="normal">num</span><span class="symbol">;</span><span class="normal"> </span><span class="cbracket">}</span>
-<span class="normal">    </span><span class="cbracket">}</span>
+        // needed only for negative numbers
+        if (den &lt; 0) { den = -den; num = -num; }
+    }
 
-<span class="normal">    </span><span class="comment">// return the numerator and denominator of (this)</span>
-<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">numerator</span><span class="symbol">()</span><span class="normal">   </span><span class="cbracket">{</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> num</span><span class="symbol">;</span><span class="normal"> </span><span class="cbracket">}</span>
-<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">denominator</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> den</span><span class="symbol">;</span><span class="normal"> </span><span class="cbracket">}</span>
+    // return the numerator and denominator of (this)
+    public int numerator()   { return num; }
+    public int denominator() { return den; }
 
-<span class="normal">    </span><span class="comment">// return double precision representation of (this)</span>
-<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">toDouble</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
-<span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="symbol">(</span><span class="type">double</span><span class="symbol">)</span><span class="normal"> num </span><span class="symbol">/</span><span class="normal"> den</span><span class="symbol">;</span>
-<span class="normal">    </span><span class="cbracket">}</span>
+    // return double precision representation of (this)
+    public double toDouble() {
+        return (double) num / den;
+    }
 
-<span class="normal">    </span><span class="comment">// return string representation of (this)</span>
-<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="usertype">String</span><span class="normal"> </span><span class="function">toString</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span><span class="normal"> </span>
-<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">den </span><span class="symbol">==</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> num </span><span class="symbol">+</span><span class="normal"> </span><span class="string">""</span><span class="symbol">;</span>
-<span class="normal">        </span><span class="keyword">else</span><span class="normal">          </span><span class="keyword">return</span><span class="normal"> num </span><span class="symbol">+</span><span class="normal"> </span><span class="string">"/"</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> den</span><span class="symbol">;</span>
-<span class="normal">    </span><span class="cbracket">}</span>
+    // return string representation of (this)
+    public String toString() { 
+        if (den == 1) return num + "";
+        else          return num + "/" + den;
+    }
 
-<span class="normal">    </span><span class="comment">// return { -1, 0, +1 } if a &lt; b, a = b, or a &gt; b</span>
-<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">compareTo</span><span class="symbol">(</span><span class="usertype">Rational</span><span class="normal"> b</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
-<span class="normal">        </span><span class="usertype">Rational</span><span class="normal"> a </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">this</span><span class="symbol">;</span>
-<span class="normal">        </span><span class="type">int</span><span class="normal"> lhs </span><span class="symbol">=</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">num </span><span class="symbol">*</span><span class="normal"> b</span><span class="symbol">.</span><span class="normal">den</span><span class="symbol">;</span>
-<span class="normal">        </span><span class="type">int</span><span class="normal"> rhs </span><span class="symbol">=</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">den </span><span class="symbol">*</span><span class="normal"> b</span><span class="symbol">.</span><span class="normal">num</span><span class="symbol">;</span>
-<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">lhs </span><span class="symbol">&lt;</span><span class="normal"> rhs</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">;</span>
-<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">lhs </span><span class="symbol">&gt;</span><span class="normal"> rhs</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> </span><span class="symbol">+</span><span class="number">1</span><span class="symbol">;</span>
-<span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
-<span class="normal">    </span><span class="cbracket">}</span>
+    // return { -1, 0, +1 } if a &lt; b, a = b, or a &gt; b
+    public int compareTo(Rational b) {
+        Rational a = this;
+        int lhs = a.num * b.den;
+        int rhs = a.den * b.num;
+        if (lhs &lt; rhs) return -1;
+        if (lhs &gt; rhs) return +1;
+        return 0;
+    }
 
-<span class="normal">    </span><span class="comment">// is this Rational object equal to y?</span>
-<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">boolean</span><span class="normal"> </span><span class="function">equals</span><span class="symbol">(</span><span class="usertype">Object</span><span class="normal"> y</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
-<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">y </span><span class="symbol">==</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> </span><span class="keyword">false</span><span class="symbol">;</span>
-<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">y</span><span class="symbol">.</span><span class="function">getClass</span><span class="symbol">()</span><span class="normal"> </span><span class="symbol">!=</span><span class="normal"> </span><span class="keyword">this</span><span class="symbol">.</span><span class="function">getClass</span><span class="symbol">())</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> </span><span class="keyword">false</span><span class="symbol">;</span>
-<span class="normal">        </span><span class="usertype">Rational</span><span class="normal"> b </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">Rational</span><span class="symbol">)</span><span class="normal"> y</span><span class="symbol">;</span>
-<span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="function">compareTo</span><span class="symbol">(</span><span class="normal">b</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
-<span class="normal">    </span><span class="cbracket">}</span>
+    // is this Rational object equal to y?
+    public boolean equals(Object y) {
+        if (y == null) return false;
+        if (y.getClass() != this.getClass()) return false;
+        Rational b = (Rational) y;
+        return compareTo(b) == 0;
+    }
 
-<span class="normal">    </span><span class="comment">// hashCode consistent with equals() and compareTo()</span>
-<span class="normal">    </span><span class="comment">// (better to hash the numerator and denominator and combine)</span>
-<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">hashCode</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
-<span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="keyword">this</span><span class="symbol">.</span><span class="function">toString</span><span class="symbol">().</span><span class="function">hashCode</span><span class="symbol">();</span>
-<span class="normal">    </span><span class="cbracket">}</span>
-
-
-<span class="normal">    </span><span class="comment">// create and return a new rational (r.num + s.num) / (r.den + s.den)</span>
-<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="usertype">Rational</span><span class="normal"> </span><span class="function">mediant</span><span class="symbol">(</span><span class="usertype">Rational</span><span class="normal"> r</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">Rational</span><span class="normal"> s</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
-<span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(</span><span class="normal">r</span><span class="symbol">.</span><span class="normal">num </span><span class="symbol">+</span><span class="normal"> s</span><span class="symbol">.</span><span class="normal">num</span><span class="symbol">,</span><span class="normal"> r</span><span class="symbol">.</span><span class="normal">den </span><span class="symbol">+</span><span class="normal"> s</span><span class="symbol">.</span><span class="normal">den</span><span class="symbol">);</span>
-<span class="normal">    </span><span class="cbracket">}</span>
-
-<span class="normal">    </span><span class="comment">// return gcd(|m|, |n|)</span>
-<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">gcd</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> m</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> n</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
-<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">m </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> m </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">-</span><span class="normal">m</span><span class="symbol">;</span>
-<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">n </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> n </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">-</span><span class="normal">n</span><span class="symbol">;</span>
-<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="number">0</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> n</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> m</span><span class="symbol">;</span>
-<span class="normal">        </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> </span><span class="function">gcd</span><span class="symbol">(</span><span class="normal">n</span><span class="symbol">,</span><span class="normal"> m </span><span class="symbol">%</span><span class="normal"> n</span><span class="symbol">);</span>
-<span class="normal">    </span><span class="cbracket">}</span>
-
-<span class="normal">    </span><span class="comment">// return lcm(|m|, |n|)</span>
-<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">lcm</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> m</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> n</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
-<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">m </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> m </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">-</span><span class="normal">m</span><span class="symbol">;</span>
-<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">n </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> n </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">-</span><span class="normal">n</span><span class="symbol">;</span>
-<span class="normal">        </span><span class="keyword">return</span><span class="normal"> m </span><span class="symbol">*</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">n </span><span class="symbol">/</span><span class="normal"> </span><span class="function">gcd</span><span class="symbol">(</span><span class="normal">m</span><span class="symbol">,</span><span class="normal"> n</span><span class="symbol">));</span><span class="normal">    </span><span class="comment">// parentheses important to avoid overflow</span>
-<span class="normal">    </span><span class="cbracket">}</span>
-
-<span class="normal">    </span><span class="comment">// return a * b, staving off overflow as much as possible by cross-cancellation</span>
-<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="usertype">Rational</span><span class="normal"> </span><span class="function">times</span><span class="symbol">(</span><span class="usertype">Rational</span><span class="normal"> b</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
-<span class="normal">        </span><span class="usertype">Rational</span><span class="normal"> a </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">this</span><span class="symbol">;</span>
-
-<span class="normal">        </span><span class="comment">// reduce p1/q2 and p2/q1, then multiply, where a = p1/q1 and b = p2/q2</span>
-<span class="normal">        </span><span class="usertype">Rational</span><span class="normal"> c </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">.</span><span class="normal">num</span><span class="symbol">,</span><span class="normal"> b</span><span class="symbol">.</span><span class="normal">den</span><span class="symbol">);</span>
-<span class="normal">        </span><span class="usertype">Rational</span><span class="normal"> d </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(</span><span class="normal">b</span><span class="symbol">.</span><span class="normal">num</span><span class="symbol">,</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">den</span><span class="symbol">);</span>
-<span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(</span><span class="normal">c</span><span class="symbol">.</span><span class="normal">num </span><span class="symbol">*</span><span class="normal"> d</span><span class="symbol">.</span><span class="normal">num</span><span class="symbol">,</span><span class="normal"> c</span><span class="symbol">.</span><span class="normal">den </span><span class="symbol">*</span><span class="normal"> d</span><span class="symbol">.</span><span class="normal">den</span><span class="symbol">);</span>
-<span class="normal">    </span><span class="cbracket">}</span>
+    // hashCode consistent with equals() and compareTo()
+    // (better to hash the numerator and denominator and combine)
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
 
 
-<span class="normal">    </span><span class="comment">// return a + b, staving off overflow</span>
-<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="usertype">Rational</span><span class="normal"> </span><span class="function">plus</span><span class="symbol">(</span><span class="usertype">Rational</span><span class="normal"> b</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
-<span class="normal">        </span><span class="usertype">Rational</span><span class="normal"> a </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">this</span><span class="symbol">;</span>
+    // create and return a new rational (r.num + s.num) / (r.den + s.den)
+    public static Rational mediant(Rational r, Rational s) {
+        return new Rational(r.num + s.num, r.den + s.den);
+    }
 
-<span class="normal">        </span><span class="comment">// special cases</span>
-<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">.</span><span class="function">compareTo</span><span class="symbol">(</span><span class="normal">zero</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> b</span><span class="symbol">;</span>
-<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">b</span><span class="symbol">.</span><span class="function">compareTo</span><span class="symbol">(</span><span class="normal">zero</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> a</span><span class="symbol">;</span>
+    // return gcd(|m|, |n|)
+    private static int gcd(int m, int n) {
+        if (m &lt; 0) m = -m;
+        if (n &lt; 0) n = -n;
+        if (0 == n) return m;
+        else return gcd(n, m % n);
+    }
 
-<span class="normal">        </span><span class="comment">// Find gcd of numerators and denominators</span>
-<span class="normal">        </span><span class="type">int</span><span class="normal"> f </span><span class="symbol">=</span><span class="normal"> </span><span class="function">gcd</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">.</span><span class="normal">num</span><span class="symbol">,</span><span class="normal"> b</span><span class="symbol">.</span><span class="normal">num</span><span class="symbol">);</span>
-<span class="normal">        </span><span class="type">int</span><span class="normal"> g </span><span class="symbol">=</span><span class="normal"> </span><span class="function">gcd</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">.</span><span class="normal">den</span><span class="symbol">,</span><span class="normal"> b</span><span class="symbol">.</span><span class="normal">den</span><span class="symbol">);</span>
+    // return lcm(|m|, |n|)
+    private static int lcm(int m, int n) {
+        if (m &lt; 0) m = -m;
+        if (n &lt; 0) n = -n;
+        return m * (n / gcd(m, n));    // parentheses important to avoid overflow
+    }
 
-<span class="normal">        </span><span class="comment">// add cross-product terms for numerator</span>
-<span class="normal">        </span><span class="usertype">Rational</span><span class="normal"> s </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">((</span><span class="normal">a</span><span class="symbol">.</span><span class="normal">num </span><span class="symbol">/</span><span class="normal"> f</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">b</span><span class="symbol">.</span><span class="normal">den </span><span class="symbol">/</span><span class="normal"> g</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">b</span><span class="symbol">.</span><span class="normal">num </span><span class="symbol">/</span><span class="normal"> f</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">.</span><span class="normal">den </span><span class="symbol">/</span><span class="normal"> g</span><span class="symbol">),</span>
-<span class="normal">                                  </span><span class="function">lcm</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">.</span><span class="normal">den</span><span class="symbol">,</span><span class="normal"> b</span><span class="symbol">.</span><span class="normal">den</span><span class="symbol">));</span>
+    // return a * b, staving off overflow as much as possible by cross-cancellation
+    public Rational times(Rational b) {
+        Rational a = this;
 
-<span class="normal">        </span><span class="comment">// multiply back in</span>
-<span class="normal">        s</span><span class="symbol">.</span><span class="normal">num </span><span class="symbol">*=</span><span class="normal"> f</span><span class="symbol">;</span>
-<span class="normal">        </span><span class="keyword">return</span><span class="normal"> s</span><span class="symbol">;</span>
-<span class="normal">    </span><span class="cbracket">}</span>
-
-<span class="normal">    </span><span class="comment">// return -a</span>
-<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="usertype">Rational</span><span class="normal"> </span><span class="function">negate</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
-<span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(-</span><span class="normal">num</span><span class="symbol">,</span><span class="normal"> den</span><span class="symbol">);</span>
-<span class="normal">    </span><span class="cbracket">}</span>
-
-<span class="normal">    </span><span class="comment">// return |a|</span>
-<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="usertype">Rational</span><span class="normal"> </span><span class="function">abs</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
-<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">num </span><span class="symbol">&gt;=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> </span><span class="keyword">this</span><span class="symbol">;</span>
-<span class="normal">        </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> </span><span class="function">negate</span><span class="symbol">();</span>
-<span class="normal">    </span><span class="cbracket">}</span>
-
-<span class="normal">    </span><span class="comment">// return a - b</span>
-<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="usertype">Rational</span><span class="normal"> </span><span class="function">minus</span><span class="symbol">(</span><span class="usertype">Rational</span><span class="normal"> b</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
-<span class="normal">        </span><span class="usertype">Rational</span><span class="normal"> a </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">this</span><span class="symbol">;</span>
-<span class="normal">        </span><span class="keyword">return</span><span class="normal"> a</span><span class="symbol">.</span><span class="function">plus</span><span class="symbol">(</span><span class="normal">b</span><span class="symbol">.</span><span class="function">negate</span><span class="symbol">());</span>
-<span class="normal">    </span><span class="cbracket">}</span>
+        // reduce p1/q2 and p2/q1, then multiply, where a = p1/q1 and b = p2/q2
+        Rational c = new Rational(a.num, b.den);
+        Rational d = new Rational(b.num, a.den);
+        return new Rational(c.num * d.num, c.den * d.den);
+    }
 
 
-<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="usertype">Rational</span><span class="normal"> </span><span class="function">reciprocal</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(</span><span class="normal">den</span><span class="symbol">,</span><span class="normal"> num</span><span class="symbol">);</span><span class="normal">  </span><span class="cbracket">}</span>
+    // return a + b, staving off overflow
+    public Rational plus(Rational b) {
+        Rational a = this;
 
-<span class="normal">    </span><span class="comment">// return a / b</span>
-<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="usertype">Rational</span><span class="normal"> </span><span class="function">divides</span><span class="symbol">(</span><span class="usertype">Rational</span><span class="normal"> b</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
-<span class="normal">        </span><span class="usertype">Rational</span><span class="normal"> a </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">this</span><span class="symbol">;</span>
-<span class="normal">        </span><span class="keyword">return</span><span class="normal"> a</span><span class="symbol">.</span><span class="function">times</span><span class="symbol">(</span><span class="normal">b</span><span class="symbol">.</span><span class="function">reciprocal</span><span class="symbol">());</span>
-<span class="normal">    </span><span class="cbracket">}</span>
+        // special cases
+        if (a.compareTo(zero) == 0) return b;
+        if (b.compareTo(zero) == 0) return a;
+
+        // Find gcd of numerators and denominators
+        int f = gcd(a.num, b.num);
+        int g = gcd(a.den, b.den);
+
+        // add cross-product terms for numerator
+        Rational s = new Rational((a.num / f) * (b.den / g) + (b.num / f) * (a.den / g),
+                                  lcm(a.den, b.den));
+
+        // multiply back in
+        s.num *= f;
+        return s;
+    }
+
+    // return -a
+    public Rational negate() {
+        return new Rational(-num, den);
+    }
+
+    // return |a|
+    public Rational abs() {
+        if (num &gt;= 0) return this;
+        else return negate();
+    }
+
+    // return a - b
+    public Rational minus(Rational b) {
+        Rational a = this;
+        return a.plus(b.negate());
+    }
 
 
-<span class="normal">    </span><span class="comment">// test client</span>
-<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
-<span class="normal">        </span><span class="usertype">Rational</span><span class="normal"> x</span><span class="symbol">,</span><span class="normal"> y</span><span class="symbol">,</span><span class="normal"> z</span><span class="symbol">;</span>
+    public Rational reciprocal() { return new Rational(den, num);  }
 
-<span class="normal">        </span><span class="comment">// 1/2 + 1/3 = 5/6</span>
-<span class="normal">        x </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(</span><span class="number">1</span><span class="symbol">,</span><span class="normal"> </span><span class="number">2</span><span class="symbol">);</span>
-<span class="normal">        y </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(</span><span class="number">1</span><span class="symbol">,</span><span class="normal"> </span><span class="number">3</span><span class="symbol">);</span>
-<span class="normal">        z </span><span class="symbol">=</span><span class="normal"> x</span><span class="symbol">.</span><span class="function">plus</span><span class="symbol">(</span><span class="normal">y</span><span class="symbol">);</span>
-<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">z</span><span class="symbol">);</span>
+    // return a / b
+    public Rational divides(Rational b) {
+        Rational a = this;
+        return a.times(b.reciprocal());
+    }
 
-<span class="normal">        </span><span class="comment">// 8/9 + 1/9 = 1</span>
-<span class="normal">        x </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(</span><span class="number">8</span><span class="symbol">,</span><span class="normal"> </span><span class="number">9</span><span class="symbol">);</span>
-<span class="normal">        y </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(</span><span class="number">1</span><span class="symbol">,</span><span class="normal"> </span><span class="number">9</span><span class="symbol">);</span>
-<span class="normal">        z </span><span class="symbol">=</span><span class="normal"> x</span><span class="symbol">.</span><span class="function">plus</span><span class="symbol">(</span><span class="normal">y</span><span class="symbol">);</span>
-<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">z</span><span class="symbol">);</span>
 
-<span class="normal">        </span><span class="comment">// 1/200000000 + 1/300000000 = 1/120000000</span>
-<span class="normal">        x </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(</span><span class="number">1</span><span class="symbol">,</span><span class="normal"> </span><span class="number">200000000</span><span class="symbol">);</span>
-<span class="normal">        y </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(</span><span class="number">1</span><span class="symbol">,</span><span class="normal"> </span><span class="number">300000000</span><span class="symbol">);</span>
-<span class="normal">        z </span><span class="symbol">=</span><span class="normal"> x</span><span class="symbol">.</span><span class="function">plus</span><span class="symbol">(</span><span class="normal">y</span><span class="symbol">);</span>
-<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">z</span><span class="symbol">);</span>
+    // test client
+    public static void main(String[] args) {
+        Rational x, y, z;
 
-<span class="normal">        </span><span class="comment">// 1073741789/20 + 1073741789/30 = 1073741789/12</span>
-<span class="normal">        x </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(</span><span class="number">1073741789</span><span class="symbol">,</span><span class="normal"> </span><span class="number">20</span><span class="symbol">);</span>
-<span class="normal">        y </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(</span><span class="number">1073741789</span><span class="symbol">,</span><span class="normal"> </span><span class="number">30</span><span class="symbol">);</span>
-<span class="normal">        z </span><span class="symbol">=</span><span class="normal"> x</span><span class="symbol">.</span><span class="function">plus</span><span class="symbol">(</span><span class="normal">y</span><span class="symbol">);</span>
-<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">z</span><span class="symbol">);</span>
+        // 1/2 + 1/3 = 5/6
+        x = new Rational(1, 2);
+        y = new Rational(1, 3);
+        z = x.plus(y);
+        StdOut.println(z);
 
-<span class="normal">        </span><span class="comment">//  4/17 * 17/4 = 1</span>
-<span class="normal">        x </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(</span><span class="number">4</span><span class="symbol">,</span><span class="normal"> </span><span class="number">17</span><span class="symbol">);</span>
-<span class="normal">        y </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(</span><span class="number">17</span><span class="symbol">,</span><span class="normal"> </span><span class="number">4</span><span class="symbol">);</span>
-<span class="normal">        z </span><span class="symbol">=</span><span class="normal"> x</span><span class="symbol">.</span><span class="function">times</span><span class="symbol">(</span><span class="normal">y</span><span class="symbol">);</span>
-<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">z</span><span class="symbol">);</span>
+        // 8/9 + 1/9 = 1
+        x = new Rational(8, 9);
+        y = new Rational(1, 9);
+        z = x.plus(y);
+        StdOut.println(z);
 
-<span class="normal">        </span><span class="comment">// 3037141/3247033 * 3037547/3246599 = 841/961 </span>
-<span class="normal">        x </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(</span><span class="number">3037141</span><span class="symbol">,</span><span class="normal"> </span><span class="number">3247033</span><span class="symbol">);</span>
-<span class="normal">        y </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(</span><span class="number">3037547</span><span class="symbol">,</span><span class="normal"> </span><span class="number">3246599</span><span class="symbol">);</span>
-<span class="normal">        z </span><span class="symbol">=</span><span class="normal"> x</span><span class="symbol">.</span><span class="function">times</span><span class="symbol">(</span><span class="normal">y</span><span class="symbol">);</span>
-<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">z</span><span class="symbol">);</span>
+        // 1/200000000 + 1/300000000 = 1/120000000
+        x = new Rational(1, 200000000);
+        y = new Rational(1, 300000000);
+        z = x.plus(y);
+        StdOut.println(z);
 
-<span class="normal">        </span><span class="comment">// 1/6 - -4/-8 = -1/3</span>
-<span class="normal">        x </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(</span><span class="normal"> </span><span class="number">1</span><span class="symbol">,</span><span class="normal">  </span><span class="number">6</span><span class="symbol">);</span>
-<span class="normal">        y </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Rational</span><span class="symbol">(-</span><span class="number">4</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">8</span><span class="symbol">);</span>
-<span class="normal">        z </span><span class="symbol">=</span><span class="normal"> x</span><span class="symbol">.</span><span class="function">minus</span><span class="symbol">(</span><span class="normal">y</span><span class="symbol">);</span>
-<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">z</span><span class="symbol">);</span>
-<span class="normal">    </span><span class="cbracket">}</span>
+        // 1073741789/20 + 1073741789/30 = 1073741789/12
+        x = new Rational(1073741789, 20);
+        y = new Rational(1073741789, 30);
+        z = x.plus(y);
+        StdOut.println(z);
 
-<span class="cbracket">}</span>
-</tt></pre>
+        //  4/17 * 17/4 = 1
+        x = new Rational(4, 17);
+        y = new Rational(17, 4);
+        z = x.times(y);
+        StdOut.println(z);
 
-<script type="text/javascript">
+        // 3037141/3247033 * 3037547/3246599 = 841/961 
+        x = new Rational(3037141, 3247033);
+        y = new Rational(3037547, 3246599);
+        z = x.times(y);
+        StdOut.println(z);
+
+        // 1/6 - -4/-8 = -1/3
+        x = new Rational( 1,  6);
+        y = new Rational(-4, -8);
+        z = x.minus(y);
+        StdOut.println(z);
+    }
+
+}
+
+
+
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
+
+
 try {
 var pageTracker = _gat._getTracker("UA-10811519-1");
 pageTracker._trackPageview();
-} catch(err) {}</script>
+} catch(err) {}
 
-</body>
 
-<p><br><address><small>
+
+
 Copyright &copy; 2000&ndash;2017, Robert Sedgewick and Kevin Wayne.
-<br>Last updated: Fri Oct 20 14:12:12 EDT 2017.
-</small></address>
+Last updated: Fri Oct 20 14:12:12 EDT 2017.
 
-</html>
+
+
+
