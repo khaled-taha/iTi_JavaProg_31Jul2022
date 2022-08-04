@@ -3,26 +3,31 @@
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
-public class LongestWord {
+public strictfp class LongestWord {
 
     public static void main(String[] args) {
-       
 
-        File file = new File("file.txt");
-        
+        File file = null;
+        Scanner in = null;
+        String longestWord = "";
 
         try {
-            Scanner in = new Scanner(file);
+
+            file = new File("file.txt");
+            file.createNewFile();
+
+            in = new Scanner(file);
+
             String[] line;
-            String longestWord = "";
 
             while (in.hasNext()) { // O(n1*(n + m)) = O(n^2)
-              
+
                 // split with character that is not letter, number or underscore
                 line = in.nextLine().split("\\W"); // O(n)
-              
+
                 for (String line1 : line) { // O(m)
                     if (line1.length() > longestWord.length()) { // O(1)
                         longestWord = line1;
@@ -32,9 +37,9 @@ public class LongestWord {
 
         } catch (FileNotFoundException fnfe) {
             System.out.println(fnfe.getMessage());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
-      
+
         System.out.println(longestWord);
     }
-
-}
