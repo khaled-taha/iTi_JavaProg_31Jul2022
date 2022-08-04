@@ -45,15 +45,16 @@ public class PascalCase {
            used to allocate some memory for the first lowercase character of each word every iteration
            and use this charcter directly instead of using chatAt(i) method.
         */
-           char ch;
+           Character ch;
            
         for (int i = 0; i < values.length; i++) {
             
             // Step 1: store the first lowercase character of word.
             ch = values[i].charAt(0);
-            
+            String chString = ch.toString();
+         
             //Step 2: Replace the first lowercase character to uppercase and add the new String to the result.
-            result += values[i].replace(ch, Character.toUpperCase(ch));
+            result += values[i].replaceFirst(chString, chString.toUpperCase());
             
            } // end for loop
         
