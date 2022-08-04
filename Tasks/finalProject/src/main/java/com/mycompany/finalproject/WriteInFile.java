@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class WriteInFile extends Thread implements Runnable{
+public class WriteInFile extends Thread {
         File f;
         BufferedReader br;
         BufferedWriter bw;
