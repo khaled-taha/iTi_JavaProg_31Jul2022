@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class ReadPage extends Thread implements Runnable {
+public class ReadPage extends Thread {
 
     private File f;
     private String urlString;
