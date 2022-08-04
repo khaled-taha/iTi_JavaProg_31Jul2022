@@ -32,7 +32,8 @@ public class WriteInFile extends Thread implements Runnable{
             
             String line;
             while ((line = br.readLine()) != null) {
-                bw.write(line);
+                //to render html to string
+                bw.write(line.replaceAll("(<.*?>)", ""));
                 bw.newLine();
             }
 }
